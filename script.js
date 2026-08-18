@@ -1,4 +1,4 @@
-// Her kelimenin kendi özel kopya ipucu (Casusun göreceği şey)
+// Her kelimeye özel mantıklı kopya ipuçları (İlk harfleri büyük)
 const wordHints = {
     // Absürt & Troll
     "Seks": "İlişki / Durum",
@@ -7,7 +7,7 @@ const wordHints = {
     "Köpek": "Hayvan",
     "Sırık": "Uzun Şey",
     "Cüce": "İnsan Boyutu",
-    "Kı yı cı": "Üçlü",
+    "Kıyıcı": "Üçlü",
     "Nurgül Toksöz": "Hayali",
     "Ankara": "Şehir",
     "Hilti": "Alet / Makine",
@@ -31,11 +31,11 @@ const wordHints = {
     "Robot Kol": "Mekanik Cihaz"
 };
 
-// Kategoriler
+// Kategoriler (Kelime isimleri büyük harfle güncellendi)
 const categories = {
     absurt: {
         name: "🔥 Absürt & Troll",
-        words: ["Seks", "Dildo", "Popo", "Köpek", "Sırık", "Cüce", "Kı yı cı", "Nurgül Toksöz", "Ankara", "Hilti", "Hendek", "Pipi"]
+        words: ["Seks", "Dildo", "Popo", "Köpek", "Sırık", "Cüce", "Kıyıcı", "Nurgül Toksöz", "Ankara", "Hilti", "Hendek", "Pipi"]
     },
     gunluk: {
         name: "📍 Günlük Hayat & Mekanlar",
@@ -76,19 +76,19 @@ function setupGame() {
     let catKey = document.getElementById('category-select').value;
     let wordList = categories[catKey].words;
 
-    // Ana kelimeyi seç
+    // 1. Ana kelimeyi seç
     secretWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-    // Bu kelimenin özel ipucunu al, eğer listede yoksa genel bir şey ver
-    spyHintWord = wordHints[secretWord] || "Genel Kategori İpucu";
+    // 2. Casusa özel kopya ipucunu ver
+    spyHintWord = wordHints[secretWord] || "İlgili Kavram / Öğe";
 
-    // Rastgele birini casus yap
+    // 3. Rastgele birini casus yap
     spyIndex = Math.floor(Math.random() * players.length);
 
     // Roller oluşturuluyor
     assignedRoles = players.map((player, index) => {
         if (index === spyIndex) {
-            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli kelimeyi bilmiyorsun ama sana kopya ipucu:<br><span class="highlight">${spyHintWord}</span>` };
+            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli kelimeyi bilmiyorsun ama sana özel kopya ipucu:<br><span class="highlight">${spyHintWord}</span>` };
         } else {
             return { isSpy: false, text: `🤫 Gizli Kelimeniz:<br><br><span class="secret-word">${secretWord}</span>` };
         }
@@ -112,10 +112,6 @@ function showSecretRole() {
     showScreen('secret-screen');
     let contentDiv = document.getElementById('secret-content');
     contentDiv.innerHTML = assignedRoles[currentPlayerIndex].text;
-}
-
-function nextPlayerTrust() {
-    // Fonksiyon adı uyumu için
 }
 
 function nextPlayerTurn() {
