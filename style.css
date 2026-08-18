@@ -26,14 +26,15 @@ body {
     text-align: center;
 }
 
+/* KRİTİK: Ekranların üst üste binmesini kesin olarak engeller */
 .screen {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 20px;
 }
 
-.screen.hidden {
-    display: none;
+.screen.active {
+    display: flex;
 }
 
 h1, h2 {
@@ -112,6 +113,7 @@ input:focus, select:focus {
 .highlight {
     color: #f43f5e;
     font-size: 18px;
+    font-weight: bold;
 }
 
 .small-warn {
