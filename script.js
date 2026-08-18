@@ -1,4 +1,37 @@
-// Kategoriler ve Kelimeler (Casusa kategori başlığı yerine listeden yakın/farklı bir ipucu kelimesi verilecek)
+// Her kelimenin kendi özel kopya ipucu (Casusun göreceği şey)
+const wordHints = {
+    // Absürt & Troll
+    "Seks": "İlişki / Durum",
+    "Dildo": "Eğlence Eşyası",
+    "Popo": "Vücut Bölgesi",
+    "Köpek": "Hayvan",
+    "Sırık": "Uzun Şey",
+    "Cüce": "İnsan Boyutu",
+    "Kı yı cı": "Üçlü",
+    "Nurgül Toksöz": "Hayali",
+    "Ankara": "Şehir",
+    "Hilti": "Alet / Makine",
+    "Hendek": "Çukur / Yer",
+    "Pipi": "Vücut Bölgesi",
+
+    // Günlük Hayat & Mekanlar
+    "Kahvehane": "Sosyal Mekan",
+    "Üniversite Amfisi": "Eğitim Yeri",
+    "Metrobus": "Toplu Taşıma",
+    "Berber": "Esnaf / Dükkan",
+    "Bakkal": "Alışveriş Yeri",
+    "Sahil Kenarı": "Doğa / Mekan",
+
+    // Teknoloji & Bilim
+    "Yapay Zeka": "Yazılım / Sistem",
+    "Docker": "Yazılım Aracı",
+    "Ekran Kartı": "Donanım Parçası",
+    "Kripto Para": "Dijital Varlık",
+    "Yazılım Hatası": "Kod Problemi",
+    "Robot Kol": "Mekanik Cihaz"
+};
+
+// Kategoriler
 const categories = {
     absurt: {
         name: "🔥 Absürt & Troll",
@@ -41,15 +74,13 @@ function setupGame() {
     }
 
     let catKey = document.getElementById('category-select').value;
-    let wordList = [...categories[catKey].words];
+    let wordList = categories[catKey].words;
 
-    // Ana kelimeyi rastgele seç
-    let wordIndex = Math.floor(Math.random() * wordList.length);
-    secretWord = wordList[wordIndex];
+    // Ana kelimeyi seç
+    secretWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-    // Listeden ana kelimeyi çıkarıp casusa vereceğimiz yakın/farklı bir ipucu kelimesi seçelim
-    wordList.splice(wordIndex, 1);
-    spyHintWord = wordList[Math.floor(Math.random() * wordList.length)];
+    // Bu kelimenin özel ipucunu al, eğer listede yoksa genel bir şey ver
+    spyHintWord = wordHints[secretWord] || "Genel Kategori İpucu";
 
     // Rastgele birini casus yap
     spyIndex = Math.floor(Math.random() * players.length);
@@ -57,7 +88,7 @@ function setupGame() {
     // Roller oluşturuluyor
     assignedRoles = players.map((player, index) => {
         if (index === spyIndex) {
-            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli kelimeyi bilmiyorsun ama sana kopya kelime:<br><span class="highlight">${spyHintWord}</span>` };
+            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli kelimeyi bilmiyorsun ama sana kopya ipucu:<br><span class="highlight">${spyHintWord}</span>` };
         } else {
             return { isSpy: false, text: `🤫 Gizli Kelimeniz:<br><br><span class="secret-word">${secretWord}</span>` };
         }
@@ -81,6 +112,10 @@ function showSecretRole() {
     showScreen('secret-screen');
     let contentDiv = document.getElementById('secret-content');
     contentDiv.innerHTML = assignedRoles[currentPlayerIndex].text;
+}
+
+function nextPlayerTrust() {
+    // Fonksiyon adı uyumu için
 }
 
 function nextPlayerTurn() {
