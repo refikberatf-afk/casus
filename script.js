@@ -1,28 +1,30 @@
-// Kategoriler ve Kelimeler
+// Kategoriler ve Kelimeler (Casusa kategori başlığı yerine listeden yakın/farklı bir ipucu kelimesi verilecek)
 const categories = {
     absurt: {
         name: "🔥 Absürt & Troll",
-        words: ["Seks", "Dildo", "Popo", "Köpek", "Sırık", "Cüce", "Kı yı cı", "Nurgül Toksöz", "Ankara", "Hilti", "Hendek", "Pipi"],
-        spyHint: "Rastgele Komik / Absürt Kelimeler ve İsimler"
+        words: ["Seks", "Dildo", "Popo", "Köpek", "Sırık", "Cüce", "Kı yı cı", "Nurgül Toksöz", "Ankara", "Hilti", "Hendek", "Pipi"]
     },
     gunluk: {
         name: "📍 Günlük Hayat & Mekanlar",
-        words: ["Kahvehane", "Üniversite Amfisi", "Metrobus", "Berber", "Bakkal", "Sahil Kenarı"],
-        spyHint: "Sosyal Bir Mekan / Yer"
+        words: ["Kahvehane", "Üniversite Amfisi", "Metrobus", "Berber", "Bakkal", "Sahil Kenarı"]
     },
     teknoloji: {
         name: "💻 Teknoloji & Bilim",
-        words: ["Yapay Zeka", "Docker", "Ekran Kartı", "Kripto Para", "Yazılım Hatası", "Robot Kol"],
-        spyHint: "Dijital / Teknik Bir Kavram"
+        words: ["Yapay Zeka", "Docker", "Ekran Kartı", "Kripto Para", "Yazılım Hatası", "Robot Kol"]
     }
 };
 
 let players = [];
 let currentPlayerIndex = 0;
 let secretWord = "";
-let spyHint = "";
+let spyHintWord = "";
 let spyIndex = -1;
-let assignedRoles = []; // Her oyuncunun ne göreceği
+let assignedRoles = [];
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
 
 function setupGame() {
     let namesInput = document.getElementById('player-names').value.trim();
@@ -39,11 +41,15 @@ function setupGame() {
     }
 
     let catKey = document.getElementById('category-select').value;
-    let selectedCat = categories[catKey];
+    let wordList = [...categories[catKey].words];
 
-    // Rastgele ana kelime seç
-    secretWord = selectedCat.words[Math.floor(Math.random() * selectedCat.words.length)];
-    spyHint = selectedCat.spyHint;
+    // Ana kelimeyi rastgele seç
+    let wordIndex = Math.floor(Math.random() * wordList.length);
+    secretWord = wordList[wordIndex];
+
+    // Listeden ana kelimeyi çıkarıp casusa vereceğimiz yakın/farklı bir ipucu kelimesi seçelim
+    wordList.splice(wordIndex, 1);
+    spyHintWord = wordList[Math.floor(Math.random() * wordList.length)];
 
     // Rastgele birini casus yap
     spyIndex = Math.floor(Math.random() * players.length);
@@ -51,7 +57,7 @@ function setupGame() {
     // Roller oluşturuluyor
     assignedRoles = players.map((player, index) => {
         if (index === spyIndex) {
-            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli Kelimeyi bilmiyorsun ama ipucun:<br><span class="highlight">${spyHint}</span>` };
+            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli kelimeyi bilmiyorsun ama sana kopya kelime:<br><span class="highlight">${spyHintWord}</span>` };
         } else {
             return { isSpy: false, text: `🤫 Gizli Kelimeniz:<br><br><span class="secret-word">${secretWord}</span>` };
         }
@@ -63,23 +69,16 @@ function setupGame() {
 
 function startPassScreen() {
     if (currentPlayerIndex >= players.length) {
-        // Herkes baktıysa tartışma ekranına geç
-        document.getElementById('pass-screen').classList.add('hidden');
-        document.getElementById('gameplay-screen').classList.remove('hidden');
+        showScreen('gameplay-screen');
         return;
     }
 
-    document.getElementById('lobby-screen').classList.add('hidden');
-    document.getElementById('secret-screen').classList.add('hidden');
-    document.getElementById('pass-screen').classList.remove('hidden');
-
+    showScreen('pass-screen');
     document.getElementById('current-player-name').textContent = players[currentPlayerIndex];
 }
 
 function showSecretRole() {
-    document.getElementById('pass-screen').classList.add('hidden');
-    document.getElementById('secret-screen').classList.remove('hidden');
-
+    showScreen('secret-screen');
     let contentDiv = document.getElementById('secret-content');
     contentDiv.innerHTML = assignedRoles[currentPlayerIndex].text;
 }
@@ -90,9 +89,7 @@ function nextPlayerTurn() {
 }
 
 function revealSpy() {
-    document.getElementById('gameplay-screen').classList.add('hidden');
-    document.getElementById('result-screen').classList.remove('hidden');
-
+    showScreen('result-screen');
     let spyName = players[spyIndex];
     let winnerDiv = document.getElementById('winner-announcement');
     
@@ -104,6 +101,5 @@ function revealSpy() {
 }
 
 function resetGame() {
-    document.getElementById('result-screen').classList.add('hidden');
-    document.getElementById('lobby-screen').classList.remove('hidden');
+    showScreen('lobby-screen');
 }
