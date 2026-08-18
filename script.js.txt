@@ -1,0 +1,109 @@
+// Kategoriler ve Kelimeler
+const categories = {
+    absurt: {
+        name: "🔥 Absürt & Troll",
+        words: ["Seks", "Dildo", "Popo", "Köpek", "Sırık", "Cüce", "Kı yı cı", "Nurgül Toksöz", "Ankara", "Hilti", "Hendek", "Pipi"],
+        spyHint: "Rastgele Komik / Absürt Kelimeler ve İsimler"
+    },
+    gunluk: {
+        name: "📍 Günlük Hayat & Mekanlar",
+        words: ["Kahvehane", "Üniversite Amfisi", "Metrobus", "Berber", "Bakkal", "Sahil Kenarı"],
+        spyHint: "Sosyal Bir Mekan / Yer"
+    },
+    teknoloji: {
+        name: "💻 Teknoloji & Bilim",
+        words: ["Yapay Zeka", "Docker", "Ekran Kartı", "Kripto Para", "Yazılım Hatası", "Robot Kol"],
+        spyHint: "Dijital / Teknik Bir Kavram"
+    }
+};
+
+let players = [];
+let currentPlayerIndex = 0;
+let secretWord = "";
+let spyHint = "";
+let spyIndex = -1;
+let assignedRoles = []; // Her oyuncunun ne göreceği
+
+function setupGame() {
+    let namesInput = document.getElementById('player-names').value.trim();
+    if (!namesInput) {
+        alert("Lütfen en az birkaç oyuncu ismi gir kanka!");
+        return;
+    }
+
+    players = namesInput.split(',').map(name => name.trim()).filter(name => name.length > 0);
+    
+    if (players.length < 3) {
+        alert("Casus oyunu en az 3 kişiyle oynanır kanka!");
+        return;
+    }
+
+    let catKey = document.getElementById('category-select').value;
+    let selectedCat = categories[catKey];
+
+    // Rastgele ana kelime seç
+    secretWord = selectedCat.words[Math.floor(Math.random() * selectedCat.words.length)];
+    spyHint = selectedCat.spyHint;
+
+    // Rastgele birini casus yap
+    spyIndex = Math.floor(Math.random() * players.length);
+
+    // Roller oluşturuluyor
+    assignedRoles = players.map((player, index) => {
+        if (index === spyIndex) {
+            return { isSpy: true, text: `🕵️ SEN CASUSSUN!<br><br>Gizli Kelimeyi bilmiyorsun ama ipucun:<br><span class="highlight">${spyHint}</span>` };
+        } else {
+            return { isSpy: false, text: `🤫 Gizli Kelimeniz:<br><br><span class="secret-word">${secretWord}</span>` };
+        }
+    });
+
+    currentPlayerIndex = 0;
+    startPassScreen();
+}
+
+function startPassScreen() {
+    if (currentPlayerIndex >= players.length) {
+        // Herkes baktıysa tartışma ekranına geç
+        document.getElementById('pass-screen').classList.add('hidden');
+        document.getElementById('gameplay-screen').classList.remove('hidden');
+        return;
+    }
+
+    document.getElementById('lobby-screen').classList.add('hidden');
+    document.getElementById('secret-screen').classList.add('hidden');
+    document.getElementById('pass-screen').classList.remove('hidden');
+
+    document.getElementById('current-player-name').textContent = players[currentPlayerIndex];
+}
+
+function showSecretRole() {
+    document.getElementById('pass-screen').classList.add('hidden');
+    document.getElementById('secret-screen').classList.remove('hidden');
+
+    let contentDiv = document.getElementById('secret-content');
+    contentDiv.innerHTML = assignedRoles[currentPlayerIndex].text;
+}
+
+function nextPlayerTurn() {
+    currentPlayerIndex++;
+    startPassScreen();
+}
+
+function revealSpy() {
+    document.getElementById('gameplay-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+
+    let spyName = players[spyIndex];
+    let winnerDiv = document.getElementById('winner-announcement');
+    
+    winnerDiv.innerHTML = `
+        <p>Gizli Kelime: <b>${secretWord}</b></p><br>
+        <p>Aranızdaki Gizli Casus:</p>
+        <h3 class="highlight">${spyName} 🕵️‍♂️</h3>
+    `;
+}
+
+function resetGame() {
+    document.getElementById('result-screen').classList.add('hidden');
+    document.getElementById('lobby-screen').classList.remove('hidden');
+}
