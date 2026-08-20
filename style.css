@@ -36,9 +36,6 @@ body {
 .screen.active {
     display: flex !important;
 }
-.screen.active {
-    display: flex;
-}
 
 h1, h2 {
     color: #38bdf8;
