@@ -11,15 +11,18 @@
     <div class="game-container">
         <!-- LOBİ EKRANI -->
         <div id="lobby-screen" class="screen active">
-            <h1>🕵️ CASUS KİM?</h1>
+            <h1>CASUS KİM?</h1>
             <p>Kategoriyi seç, oyuncuları ekle, telefonu elde gezdir!</p>
             
             <div class="form-group">
                 <label>Kategori Seç:</label>
                 <select id="category-select">
-                    <option value="absurt">🔥 Absürt & Troll (Grup Özel)</option>
-                    <option value="gunluk">📍 Günlük Hayat & Mekanlar</option>
-                    <option value="teknoloji">💻 Teknoloji & Bilim</option>
+                    <option value="kamusal">Toplumsal Alanlar & Kamusal Yaşam</option>
+                    <option value="oyun">Video Oyunları Dünyası</option>
+                    <option value="teknoloji">Teknoloji & İnternet Kültürü</option>
+                    <option value="sinema">Sinema, Dizi & Popüler Kültür</option>
+                    <option value="spor">Spor, E-Spor & Aktiviteler</option>
+                    <option value="mutfak">Mutfak & Yemek Kültürü</option>
                 </select>
             </div>
 
@@ -33,7 +36,7 @@
                 <input type="text" id="player-names" value="Berat, Selim, Mushab">
             </div>
 
-            <button onclick="setupGame()" class="btn primary">Oyunu Başlat 🚀</button>
+            <button onclick="setupGame()" class="btn primary">Oyunu Başlat</button>
         </div>
 
         <!-- ROL GÖSTERME EKRANI (ELDEN ELE GEZENE) -->
@@ -43,33 +46,33 @@
                 <p>Telefonu <b id="current-player-name" class="highlight"></b> adlı oyuncuya ver!</p>
                 <p class="small-warn">Başkalarının ekranı görmediğinden emin ol!</p>
             </div>
-            <button onclick="showSecretRole()" class="btn warning">Gizli Rolümü Göster 👀</button>
+            <button onclick="showSecretRole()" class="btn warning">Gizli Rolümü Göster</button>
         </div>
 
         <!-- GİZLİ KELİME / CASUS EKRANI -->
         <div id="secret-screen" class="screen">
-            <h2>🔐 GİZLİ BİLGİN</h2>
+            <h2>GİZLİ BİLGİN</h2>
             <div class="secret-box" id="secret-content">
                 <!-- Burası JavaScript ile dolacak -->
             </div>
-            <button onclick="nextPlayerTurn()" class="btn success">Anladım, Sıradakine Ver ✓</button>
+            <button onclick="nextPlayerTurn()" class="btn success">Anladım, Sıradakine Ver</button>
         </div>
 
         <!-- TARTIŞMA VE OYLAMA EKRANI -->
         <div id="gameplay-screen" class="screen">
-            <h2>🗣️ TARTIŞMA & OYLAMA ZAMANI!</h2>
+            <h2>TARTIŞMA & OYLAMA ZAMANI!</h2>
             <p>Herkes birbirine sorular sordu, şimdi casusu bulma vakti!</p>
             <div class="info-box">
                 <p>Casus kimdi? Tartışın ve oylamayı yapın.</p>
             </div>
-            <button onclick="revealSpy()" class="btn danger">Casusu İfşa Et 🚨</button>
+            <button onclick="revealSpy()" class="btn danger">Casusu İfşa Et</button>
         </div>
 
         <!-- SONUÇ EKRANI -->
         <div id="result-screen" class="screen">
-            <h2>🏆 OYUN BİTTİ</h2>
+            <h2>OYUN BİTTİ</h2>
             <div id="winner-announcement" class="result-box"></div>
-            <button onclick="resetGame()" class="btn primary">Ana Menüye Dön 🔄</button>
+            <button onclick="resetGame()" class="btn primary">Ana Menüye Dön</button>
         </div>
     </div>
 
