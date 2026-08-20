@@ -198,12 +198,12 @@ let spyHintWord = "";
 let spyIndex = -1;
 let assignedRoles = [];
 
-// Sayfa açıldığında varsayılan olarak 4 kutucuk oluşturalım
+// Sayfa açıldığında varsayılan olarak 4 boş kutucuk oluşturalım
 window.onload = function() {
     generateNameInputs();
 };
 
-// Kişi sayısına göre input kutucukları oluşturan fonksiyon (Mevcut isimleri korur)
+// Kişi sayısına göre input kutucukları oluşturan fonksiyon (Placeholder: "1. Oyuncu", "2. Oyuncu")
 function generateNameInputs() {
     let count = parseInt(document.getElementById('player-count-input').value);
     let container = document.getElementById('name-inputs-container');
@@ -221,7 +221,7 @@ function generateNameInputs() {
         input.className = "player-name-input";
         input.placeholder = `${i + 1}. Oyuncu`;
         
-        // Eğer daha önceden bu sırada bir isim yazıldıysa onu koru, yazılmadıysa boş bırak
+        // Eğer daha önceden bu kutuya bir isim yazıldıysa koru, yoksa boş bırak
         if (oldValues[i] !== undefined) {
             input.value = oldValues[i];
         }
@@ -327,6 +327,6 @@ function revealSpy() {
 }
 
 function resetGame() {
-    // Oyunu sıfırlarken lobiye dönüyoruz ama inputlardaki isimleri ASLA silmiyoruz (yerinde kalıyor)
+    // Lobiye dönüyoruz ama inputlardaki isimler hafızada kalıyor, sıfırlanmıyor.
     showScreen('lobby-screen');
 }
