@@ -203,21 +203,29 @@ window.onload = function() {
     generateNameInputs();
 };
 
-// Kişi sayısına göre alt alta input kutucukları oluşturan fonksiyon
+// Kişi sayısına göre input kutucukları oluşturan fonksiyon (Mevcut isimleri korur)
 function generateNameInputs() {
     let count = parseInt(document.getElementById('player-count-input').value);
     let container = document.getElementById('name-inputs-container');
-    container.innerHTML = "";
+    
+    // Eskiden yazılmış olan isimleri hafızada tutalım
+    let existingInputs = container.querySelectorAll('.player-name-input');
+    let oldValues = [];
+    existingInputs.forEach(inp => oldValues.push(inp.value));
 
-    // Varsayılan örnek isimler
-    let defaultNames = ["Berat", "Selim", "Mushab", "Ahmet", "Mehmet", "Can", "Efe", "Burak", "Kaan", "Arda"];
+    container.innerHTML = "";
 
     for (let i = 0; i < count; i++) {
         let input = document.createElement('input');
         input.type = "text";
         input.className = "player-name-input";
-        input.placeholder = `${i + 1}. Oyuncu İsmi`;
-        input.value = defaultNames[i] || `Oyuncu ${i + 1}`;
+        input.placeholder = `${i + 1}. Oyuncu`;
+        
+        // Eğer daha önceden bu sırada bir isim yazıldıysa onu koru, yazılmadıysa boş bırak
+        if (oldValues[i] !== undefined) {
+            input.value = oldValues[i];
+        }
+        
         container.appendChild(input);
     }
 }
@@ -244,9 +252,11 @@ function setupGame() {
 
     nameInputs.forEach((input, index) => {
         let name = input.value.trim();
-        if (name) {
-            tempPlayers.push(name);
+        // Eğer isim kutusu boş bırakıldıysa varsayılan olarak "1. Oyuncu" vb. ata
+        if (!name) {
+            name = `${index + 1}. Oyuncu`;
         }
+        tempPlayers.push(name);
     });
 
     if (tempPlayers.length < 3) {
@@ -317,6 +327,6 @@ function revealSpy() {
 }
 
 function resetGame() {
+    // Oyunu sıfırlarken lobiye dönüyoruz ama inputlardaki isimleri ASLA silmiyoruz (yerinde kalıyor)
     showScreen('lobby-screen');
-    generateNameInputs();
 }
