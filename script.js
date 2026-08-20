@@ -198,24 +198,64 @@ let spyHintWord = "";
 let spyIndex = -1;
 let assignedRoles = [];
 
+// Sayfa açıldığında varsayılan olarak 4 kutucuk oluşturalım
+window.onload = function() {
+    generateNameInputs();
+};
+
+// Kişi sayısına göre alt alta input kutucukları oluşturan fonksiyon
+function generateNameInputs() {
+    let count = parseInt(document.getElementById('player-count-input').value);
+    let container = document.getElementById('name-inputs-container');
+    container.innerHTML = "";
+
+    // Varsayılan örnek isimler
+    let defaultNames = ["Berat", "Selim", "Mushab", "Ahmet", "Mehmet", "Can", "Efe", "Burak", "Kaan", "Arda"];
+
+    for (let i = 0; i < count; i++) {
+        let input = document.createElement('input');
+        input.type = "text";
+        input.className = "player-name-input";
+        input.placeholder = `${i + 1}. Oyuncu İsmi`;
+        input.value = defaultNames[i] || `Oyuncu ${i + 1}`;
+        container.appendChild(input);
+    }
+}
+
+// Fisher-Yates algoritması ile diziyi rastgele karıştırma (Shuffle) fonksiyonu
+function shuffleArray(array) {
+    let currentIndex = array.length, randomIndex;
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+    return array;
+}
+
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
 }
 
 function setupGame() {
-    let namesInput = document.getElementById('player-names').value.trim();
-    if (!namesInput) {
-        alert("Lütfen en az birkaç oyuncu ismi gir kanka!");
-        return;
-    }
+    let nameInputs = document.querySelectorAll('.player-name-input');
+    let tempPlayers = [];
 
-    players = namesInput.split(',').map(name => name.trim()).filter(name => name.length > 0);
-    
-    if (players.length < 3) {
+    nameInputs.forEach((input, index) => {
+        let name = input.value.trim();
+        if (name) {
+            tempPlayers.push(name);
+        }
+    });
+
+    if (tempPlayers.length < 3) {
         alert("Casus oyunu en az 3 kişiyle oynanır kanka!");
         return;
     }
+
+    // OYUNCU SIRASINI RASTGELE KARIŞTIR (SHUFFLE)
+    players = shuffleArray(tempPlayers);
 
     let catKey = document.getElementById('category-select').value;
     let pairsList = categories[catKey].pairs;
@@ -223,7 +263,6 @@ function setupGame() {
     // 1. Rastgele bir çift seç
     let randomPair = pairsList[Math.floor(Math.random() * pairsList.length)];
 
-    // Masumlara ana kelime, casusa ise uzak/soyut ipucu kelimesi gidiyor
     secretWord = randomPair[0];
     spyHintWord = randomPair[1];
 
@@ -279,4 +318,5 @@ function revealSpy() {
 
 function resetGame() {
     showScreen('lobby-screen');
+    generateNameInputs();
 }
