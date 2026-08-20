@@ -12,7 +12,7 @@
         <!-- LOBİ EKRANI -->
         <div id="lobby-screen" class="screen active">
             <h1>CASUS KİM?</h1>
-            <p>Kategoriyi seç, oyuncuları ekle, telefonu elde gezdir!</p>
+            <p>Kategoriyi seç, oyuncu sayısını belirle, isimleri gir!</p>
             
             <div class="form-group">
                 <label>Kategori Seç:</label>
@@ -27,14 +27,22 @@
             </div>
 
             <div class="form-group">
-                <label>Oyuncu İsimleri (Virgülle ayır):</label>
-                <input type="text" id="player-names" value="Berat, Selim, Mushab">
+                <label>Oyuncu Sayısı (3 - 10):</label>
+                <input type="number" id="player-count-input" min="3" max="10" value="4" onchange="generateNameInputs()">
+            </div>
+
+            <!-- Dinamik isim kutucuklarının geleceği alan -->
+            <div class="form-group">
+                <label>Oyuncu İsimleri:</label>
+                <div id="name-inputs-container" style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- JavaScript ile dolacak -->
+                </div>
             </div>
 
             <button onclick="setupGame()" class="btn primary">Oyunu Başlat</button>
         </div>
 
-        <!-- ROL GÖSTERME EKRANI (ELDEN ELE GEZENE) -->
+        <!-- ROL GÖSTERME EKRANI -->
         <div id="pass-screen" class="screen">
             <h2 id="turn-title">Sıradaki Oyuncu</h2>
             <div class="card-box">
@@ -47,9 +55,7 @@
         <!-- GİZLİ KELİME / CASUS EKRANI -->
         <div id="secret-screen" class="screen">
             <h2>GİZLİ BİLGİN</h2>
-            <div class="secret-box" id="secret-content">
-                <!-- Burası JavaScript ile dolacak -->
-            </div>
+            <div class="secret-box" id="secret-content"></div>
             <button onclick="nextPlayerTurn()" class="btn success">Anladım, Sıradakine Ver</button>
         </div>
 
